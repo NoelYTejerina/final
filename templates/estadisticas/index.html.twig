@@ -1,8 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard de Manager{% endblock %}
+
+{% block body %}
+<style>
+.container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    padding: 20px;
+}
+
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    width: 100%;
+    height: 450px;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+}
+
+.chart-container h2 {
+    margin-bottom: 10px;
+}
+
+.chart-container.pie-chart canvas {
+    aspect-ratio: 1;
+    max-width: 300px;
+    max-height: 300px;
+}
+</style>
+
+<h2>Dashboard de Manager</h2>
+<div class="container">
+    <div class="chart-container">
+        <h3>Estadísticas de Likes por Playlist</h3>
+        <canvas id="LikesChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <h3>Estadísticas de Reproducciones por Playlist</h3>
+        <canvas id="reproduccionesChart"></canvas>
+    </div>
+
+    <div class="chart-container pie-chart">
+        <h3>Distribución de edades</h3>
+        <canvas id="EdadesChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Datos de ejemplo (reemplaza con los datos reales desde el backend)
     const datosLikes = {{ datos_likes|json_encode|raw }};
-    const datosReproducciones = {{ datos_reproducciones|json_encode|raw }};
-    const cancionesMasReproducidas = {{ canciones_mas_reprod|json_encode|raw }};
     const distribucionEdades = {{ edad_datos|json_encode|raw }};
 
     // Configuración de gráficos (usa Chart.js)
@@ -34,32 +90,6 @@
         }
     });
 
-    new Chart(document.getElementById('reproduccionesCancionChart'), {
-        type: 'pie',
-        data: {
-            labels: cancionesMasReproducidas.map(item => item.cancion),
-            datasets: [{
-                label: 'Reproducciones',
-                data: cancionesMasReproducidas.map(item => item.reproduccionesXcancion),
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)'
-                ],
-                borderWidth: 1
-            }]
-        }
-    });
-
     new Chart(document.getElementById('EdadesChart'), {
         type: 'pie',
         data: {
@@ -86,3 +116,4 @@
         }
     });
 </script>
+{% endblock %}

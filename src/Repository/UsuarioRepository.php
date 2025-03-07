@@ -143,10 +143,10 @@ public function clasificarUsuariosXedad(): array
     return $this->getEntityManager()->createQuery("
         SELECT 
             CASE 
-                WHEN DATE_DIFF(CURRENT_DATE(), u.fechaNacimiento) / 365 < 18 THEN 'Menos de 18'
-                WHEN DATE_DIFF(CURRENT_DATE(), u.fechaNacimiento) / 365 BETWEEN 18 AND 25 THEN '18-25'
-                WHEN DATE_DIFF(CURRENT_DATE(), u.fechaNacimiento) / 365 BETWEEN 26 AND 35 THEN '26-35'
-                WHEN DATE_DIFF(CURRENT_DATE(), u.fechaNacimiento) / 365 BETWEEN 36 AND 50 THEN '36-50'
+                WHEN (DATE_DIFF(CURRENT_DATE(), u.fechaNacimiento) / 365) < 18 THEN 'Menos de 18'
+                WHEN (DATE_DIFF(CURRENT_DATE(), u.fechaNacimiento) / 365) >= 18 AND (DATE_DIFF(CURRENT_DATE(), u.fechaNacimiento) / 365) <= 25 THEN '18-25'
+                WHEN (DATE_DIFF(CURRENT_DATE(), u.fechaNacimiento) / 365) >= 26 AND (DATE_DIFF(CURRENT_DATE(), u.fechaNacimiento) / 365) <= 35 THEN '26-35'
+                WHEN (DATE_DIFF(CURRENT_DATE(), u.fechaNacimiento) / 365) >= 36 AND (DATE_DIFF(CURRENT_DATE(), u.fechaNacimiento) / 365) <= 50 THEN '36-50'
                 ELSE 'Más de 50' 
             END AS rango_edad, 
             COUNT(u.id) AS count
@@ -156,6 +156,7 @@ public function clasificarUsuariosXedad(): array
         ORDER BY count DESC
     ")->getResult();
 }
+
 
 
 private function calcularEdad($fecha_nacimiento)
