@@ -15,11 +15,16 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/cancion', name: 'cancion_')]
 class CancionController extends AbstractController
 {
-    #[Route('/', name: 'listar_canciones', methods: ['GET'])]
-    public function listarCanciones(CancionRepository $cancionRepository): JsonResponse
+    #[Route('/canciones', name: 'listar_canciones', methods: ['GET'])]
+    public function listarCanciones(CancionRepository $cancionRepository): Response
     {
+        // Obtener todas las canciones desde el repositorio
         $canciones = $cancionRepository->findAll();
-        return $this->json($canciones);
+
+        // Renderizar la plantilla 'index.html.twig' y pasar las canciones
+        return $this->render('cancion/index.html.twig', [
+            'canciones' => $canciones,
+        ]);
     }
     #[Route('/{id}', name: 'ver_cancion', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function verCancion(int $id, CancionRepository $cancionRepository, Request $request): Response

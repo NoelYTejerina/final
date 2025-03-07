@@ -25,4 +25,3 @@ class EstadisticasController extends AbstractController
         ]);
     }
 }
-

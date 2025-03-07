@@ -28,7 +28,7 @@
 
     <nav>
         <ul>
-            <li><a href="#">Canciones</a></li>
+                <li><a href="{{ path('cancion_listar_canciones')}}">🎵 Canciones</a></li>
             <li><a href="{{ path('playlist_vista_general_playlists') }}">Playlist</a></li> 
                    
         </ul>
@@ -46,7 +46,7 @@
     {% if app.request.get('_route') not in ['app_login', 'app_register', 'app_perfil'] %}
         <aside>
             <ul>
-                <li><a href="#">🎵 Canciones</a></li>
+                <li><a href="{{ path('cancion_listar_canciones')}}">🎵 Canciones</a></li>
                 <li><a href="{{ path('playlist_vista_general_playlists') }}">📂 Playlist</a></li>
                    {% if is_granted('ROLE_MANAGER') %}
                   <li>
