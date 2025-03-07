@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Repository\PlaylistCancionRepository;
+
+
 use App\Form\PlaylistType;
 use App\Entity\Playlist;
 use App\Entity\PlaylistCancion;
@@ -292,6 +295,27 @@ class PlaylistController extends AbstractController
 
         return $this->render('playlist/mis_playlists.html.twig', [
             'playlists' => $playlists,
+        ]);
+    }
+
+    #[Route('/playlists', name: 'vista_general_playlists', methods: ['GET'])]
+    public function vistaGeneralPlaylists(
+        PlaylistRepository $playlistRepository,
+        PlaylistCancionRepository $playlistCancionRepository
+    ): Response {
+        // Obtener las playlists más populares (top 5 por likes)
+        $playlistsTopLikes = $playlistRepository->findMostPopular(5);
+    
+        // Obtener las playlists recientes (últimas 5)
+        $playlistsRecientes = $playlistRepository->findRecentPlaylists(5);
+    
+        // Obtener todas las playlists públicas
+        $todasLasPlaylists = $playlistRepository->findAll();
+    
+        return $this->render('playlist/index.html.twig', [
+            'playlistsTopLikes' => $playlistsTopLikes,
+            'playlistsRecientes' => $playlistsRecientes,
+            'todasLasPlaylists' => $todasLasPlaylists,
         ]);
     }
     

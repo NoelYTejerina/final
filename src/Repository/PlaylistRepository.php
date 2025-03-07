@@ -127,4 +127,17 @@ class PlaylistRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+ * Obtiene el total de likes por playlist.
+ */
+public function obtenerLikesPorPlaylist(): array
+{
+    return $this->createQueryBuilder('p')
+        ->select('p.nombre AS playlist, p.likes AS totalLikes')
+        ->orderBy('p.likes', 'DESC')
+        ->getQuery()
+        ->getResult();
+}
+
 }

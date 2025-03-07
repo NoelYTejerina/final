@@ -83,4 +83,31 @@ class PlaylistCancionRepository extends ServiceEntityRepository
         ->getResult();
 }
 
+public function obtenerLikesPorPlaylist(): array
+{
+    return $this->createQueryBuilder('pc')
+        ->select('p.nombre AS playlist, SUM(pc.likes) AS totalLikes')
+        ->join('pc.playlist', 'p')
+        ->groupBy('p.id')
+        ->orderBy('totalLikes', 'DESC')
+        ->getQuery()
+        ->getResult();
 }
+
+/**
+ * Obtiene el total de reproducciones por playlist.
+ */
+public function obtenerReproduccionesPorPlaylist(): array
+{
+    return $this->createQueryBuilder('pc')
+        ->select('p.nombre AS playlist, SUM(pc.reproducciones) AS totalReproducciones')
+        ->join('pc.playlist', 'p')
+        ->groupBy('p.id')
+        ->orderBy('totalReproducciones', 'DESC')
+        ->getQuery()
+        ->getResult();
+}
+}
+
+
+

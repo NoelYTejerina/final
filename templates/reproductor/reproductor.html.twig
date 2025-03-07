@@ -28,7 +28,11 @@ function reproducirCancionIndividual(element) {
     const cancionTitulo = element.getAttribute('data-cancion-titulo');
 
     // Obtener los detalles de la canción
-   fetch(`/cancion/${cancionId}`)
+    fetch(`/cancion/${cancionId}`, {
+        headers: {
+            'Accept': 'application/json' // Indicar que queremos JSON
+        }
+    })
     .then(response => {
         if (!response.ok) {
             throw new Error(`Error HTTP: ${response.status}`);
@@ -42,10 +46,8 @@ function reproducirCancionIndividual(element) {
         reproducirCancion(data.archivo, data.titulo);
     })
     .catch(error => console.error("Error al obtener la canción:", error));
-
 }
 
-// Función para reproducir una canción
 function reproducirCancion(archivo, titulo) {
     const audioPlayer = document.getElementById('audioPlayer');
     const audioSource = document.getElementById('audioSource');

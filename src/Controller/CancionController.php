@@ -22,17 +22,32 @@ class CancionController extends AbstractController
         return $this->json($canciones);
     }
     #[Route('/{id}', name: 'ver_cancion', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function verCancion(int $id, CancionRepository $cancionRepository): Response
+    public function verCancion(int $id, CancionRepository $cancionRepository, Request $request): Response
     {
         $cancion = $cancionRepository->find($id);
-        
+    
         if (!$cancion) {
             throw $this->createNotFoundException('Canción no encontrada');
         }
     
-        return $this->render('cancion/detalle_cancion.html.twig', [
-            'cancion' => $cancion,
-        ]);
+        // Determinar el tipo de respuesta basado en la cabecera "Accept"
+        if ($request->headers->get('Accept') === 'application/json') {
+            // Devolver JSON
+            return $this->json([
+                'id' => $cancion->getId(),
+                'titulo' => $cancion->getTitulo(),
+                'autor' => $cancion->getAutor(),
+                'album' => $cancion->getAlbum(),
+                'archivo' => $cancion->getArchivo(),
+                'albumImagen' => $cancion->getAlbumImagen(),
+                // Agrega más campos si es necesario
+            ]);
+        } else {
+            // Devolver HTML (renderizar la plantilla Twig)
+            return $this->render('cancion/detalle_cancion.html.twig', [
+                'cancion' => $cancion,
+            ]);
+        }
     }
     
     

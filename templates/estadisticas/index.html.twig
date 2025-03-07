@@ -1,67 +1,88 @@
+<script>
+    // Datos de ejemplo (reemplaza con los datos reales desde el backend)
+    const datosLikes = {{ datos_likes|json_encode|raw }};
+    const datosReproducciones = {{ datos_reproducciones|json_encode|raw }};
+    const cancionesMasReproducidas = {{ canciones_mas_reprod|json_encode|raw }};
+    const distribucionEdades = {{ edad_datos|json_encode|raw }};
 
+    // Configuración de gráficos (usa Chart.js)
+    new Chart(document.getElementById('LikesChart'), {
+        type: 'bar',
+        data: {
+            labels: datosLikes.map(item => item.playlist),
+            datasets: [{
+                label: 'Likes',
+                data: datosLikes.map(item => item.totalLikes),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        }
+    });
 
-{% block title %}Estadísticas{% endblock %}
+    new Chart(document.getElementById('reproduccionesChart'), {
+        type: 'bar',
+        data: {
+            labels: datosReproducciones.map(item => item.playlist),
+            datasets: [{
+                label: 'Reproducciones',
+                data: datosReproducciones.map(item => item.totalReproducciones),
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        }
+    });
 
-{% block body %}
-    <div class="container">
-        <h2>Estadísticas Generales</h2>
-        
-        <h3>Playlists más likeadas</h3>
-        <canvas id="playlistsLikesChart"></canvas>
-        
-        <h3>Playlists con más reproducciones</h3>
-        <canvas id="playlistsReproduccionesChart"></canvas>
-        
-        <h3>Distribución de edades de usuarios</h3>
-        <canvas id="usuariosEdadesChart"></canvas>
-        
-        <h3>Canciones más reproducidas</h3>
-        <canvas id="cancionesReproducidasChart"></canvas>
-        
-        <h3>Distribución de reproducciones por estilo</h3>
-        <canvas id="estilosReproduccionesChart"></canvas>
-    </div>
+    new Chart(document.getElementById('reproduccionesCancionChart'), {
+        type: 'pie',
+        data: {
+            labels: cancionesMasReproducidas.map(item => item.cancion),
+            datasets: [{
+                label: 'Reproducciones',
+                data: cancionesMasReproducidas.map(item => item.reproduccionesXcancion),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            function renderChart(canvasId, url, label, backgroundColor, borderColor) {
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        const labels = data.map(item => item[Object.keys(item)[0]]);
-                        const values = data.map(item => item[Object.keys(item)[1]]);
-
-                        const ctx = document.getElementById(canvasId).getContext('2d');
-                        new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                                labels: labels,
-                                datasets: [{
-                                    label: label,
-                                    data: values,
-                                    backgroundColor: backgroundColor,
-                                    borderColor: borderColor,
-                                    borderWidth: 1
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                }
-                            }
-                        });
-                    });
-            }
-
-            renderChart("playlistsLikesChart", "{{ path('estadisticas_playlists_likes') }}", "Likes", 'rgba(255, 99, 132, 0.5)', 'rgba(255, 99, 132, 1)');
-            renderChart("playlistsReproduccionesChart", "{{ path('estadisticas_playlists_reproducciones') }}", "Reproducciones", 'rgba(54, 162, 235, 0.5)', 'rgba(54, 162, 235, 1)');
-            renderChart("usuariosEdadesChart", "{{ path('estadisticas_usuarios_edades') }}", "Cantidad de Usuarios", 'rgba(75, 192, 192, 0.5)', 'rgba(75, 192, 192, 1)');
-            renderChart("cancionesReproducidasChart", "{{ path('estadisticas_canciones_reproducidas') }}", "Reproducciones", 'rgba(153, 102, 255, 0.5)', 'rgba(153, 102, 255, 1)');
-            renderChart("estilosReproduccionesChart", "{{ path('estadisticas_estilos_reproducciones') }}", "Reproducciones por Estilo", 'rgba(255, 159, 64, 0.5)', 'rgba(255, 159, 64, 1)');
-        });
-    </script>
-{% endblock %}
+    new Chart(document.getElementById('EdadesChart'), {
+        type: 'pie',
+        data: {
+            labels: distribucionEdades.map(item => item.rango_edad),
+            datasets: [{
+                label: 'Distribución de edades',
+                data: distribucionEdades.map(item => item.count), // Asegúrate de contar usuarios por rango
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+</script>

@@ -1,20 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PlaylistController!{% endblock %}
+{% block title %}Playlists{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block content %}
+<main class="playlists-container">
+    <!-- Sección de Playlists Populares -->
+    <section class="playlist-section">
+        <h2>Playlists Populares</h2>
+        <div class="playlist-grid">
+            {% for playlist in playlistsTopLikes %}
+                {% include 'playlist/playlist_card.html.twig' with {
+                    'playlist': playlist,
+                    'totalCanciones': playlist.totalCanciones ?? 0,
+                    'totalDuracion': playlist.totalDuracion ?? 0
+                } %}
+            {% else %}
+                <p>No hay playlists populares.</p>
+            {% endfor %}
+        </div>
+    </section>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <!-- Sección de Playlists Recientes -->
+    <section class="playlist-section">
+        <h2>Últimas Playlists</h2>
+        <div class="playlist-grid">
+            {% for playlist in playlistsRecientes %}
+                {% include 'playlist/playlist_card.html.twig' with {
+                    'playlist': playlist,
+                    'totalCanciones': playlist.totalCanciones ?? 0,
+                    'totalDuracion': playlist.totalDuracion ?? 0
+                } %}
+            {% else %}
+                <p>No hay playlists recientes.</p>
+            {% endfor %}
+        </div>
+    </section>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/var/www/symfony/NoelProyectoSymfony/src/Controller/PlaylistController.php</code></li>
-        <li>Your template at <code>/var/www/symfony/NoelProyectoSymfony/templates/playlist/index.html.twig</code></li>
-    </ul>
-</div>
+    <!-- Sección de Todas las Playlists -->
+    <section class="playlist-section">
+        <h2>Todas las Playlists</h2>
+        <div class="playlist-grid">
+            {% for playlist in todasLasPlaylists %}
+                {% include 'playlist/playlist_card.html.twig' with {
+                    'playlist': playlist,
+                    'totalCanciones': playlist.totalCanciones ?? 0,
+                    'totalDuracion': playlist.totalDuracion ?? 0
+                } %}
+            {% else %}
+                <p>No hay playlists disponibles.</p>
+            {% endfor %}
+        </div>
+    </section>
+     <!-- Módulo del reproductor -->
+    {% include 'reproductor/reproductor.html.twig' %}
+</main>
+
 {% endblock %}

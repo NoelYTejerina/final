@@ -29,8 +29,8 @@
     <nav>
         <ul>
             <li><a href="#">Canciones</a></li>
-            <li><a href="#">Playlist</a></li>
-            <li><a href="#">Explorar</a></li>        
+            <li><a href="{{ path('playlist_vista_general_playlists') }}">Playlist</a></li> 
+                   
         </ul>
     </nav>
 
@@ -47,8 +47,12 @@
         <aside>
             <ul>
                 <li><a href="#">🎵 Canciones</a></li>
-                <li><a href="#">📂 Playlist</a></li>
-                <li><a href="#">🔍 Explorar</a></li>
+                <li><a href="{{ path('playlist_vista_general_playlists') }}">📂 Playlist</a></li>
+                   {% if is_granted('ROLE_MANAGER') %}
+                  <li>
+                      <a href="{{ path('estadisticas')}}">📂 Datos de Explotacion</a>
+                  </li>            
+                {% endif %}
                 {% if is_granted('ROLE_USER') %}
                   <li>
                       <a href="{{ path('playlist_mis_playlists') }}">📂 Mis Playlist</a>
